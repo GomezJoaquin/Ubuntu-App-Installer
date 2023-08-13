@@ -31,6 +31,8 @@ Utilizando Ansible, puedes automatizar la instalación de estas aplicaciones con
 * Java 8
 * Postman
 * npm
+* Php
+* Git
 * Ansible
 * SQLite
 * GParted
