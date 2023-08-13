@@ -1,0 +1,101 @@
+- name: Instalar aplicaciones en Ubuntu
+  hosts: ##### Especificar grupo #####
+  become: true
+
+  tasks:
+    # Agregar repositorios y claves GPG
+    - name: Agregar el repositorio de Visual Studio Code
+      shell: |
+        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+        mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+        echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
+      become: true
+
+    - name: Agregar el repositorio de Docker
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+
+    - name: Agregar el repositorio de Wireshark
+      apt:
+        name: wireshark
+        state: present
+
+    # Actualizar lista de paquetes
+    - name: Actualizar lista de paquetes
+      apt:
+        update_cache: yes
+
+    #Instalacion de paquetes
+    - name: Instalar Java 8
+      apt:
+        name: openjdk-8-jdk
+
+    - name: Instalar Ansible
+      apt:
+        name: ansible
+        state: present
+
+    - name: Instalar Visual Studio Code
+      apt:
+        name: code
+        state: present
+
+    - name: Instalar Postman usando Snap
+      snap:
+        name: postman
+
+    - name: Instalar npm
+      apt:
+        name: npm
+        state: present
+
+    - name: Instalar Wireshark
+      apt:
+        name: wireshark
+        state: present
+      become: true
+
+    - name: Instalar Traceroute
+      apt:
+        name: traceroute
+        state: present
+
+    - name: Agregar Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: yes
+
+    - name: Instalar GParted
+      apt:
+        name: gparted
+        state: present
+
+    - name: Instalar Remmina
+      apt:
+        name: remmina
+        state: present
+
+    - name: Instalar Meld
+      apt:
+        name: meld
+        state: present
+
+    - name: Instalar Nmap
+      apt:
+        name: nmap
+        state: present
+
+    # Actualizar paquetes e instalar actualizaciones
+    - name: Actualizar lista de paquetes e instalar actualizaciones
+      apt:
+        upgrade: dist
+        update_cache: yes
+        autoremove: yes
+        autoclean: yes
