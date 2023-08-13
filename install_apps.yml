@@ -1,5 +1,5 @@
 - name: Instalar aplicaciones en Ubuntu
-  hosts: 127.0.0.1
+  hosts: #### Especificar hosts ######
   become: true
 
   tasks:
