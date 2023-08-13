@@ -37,7 +37,6 @@
         state: present
       become: true
 
-
     - name: Instalar Ansible
       apt:
         name: ansible
