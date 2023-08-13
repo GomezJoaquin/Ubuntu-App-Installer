@@ -1,10 +1,11 @@
 # Configuración Personal para Instalar Aplicaciones en Ubuntu
 
-Este repositorio contiene un archivo Ansible que simplifica la instalación de las aplicaciones que utilizo regularmente en mi sistema Ubuntu. Utilizando Ansible, puedes automatizar la instalación de estas aplicaciones con facilidad.
+Este playbook simplifica la instalación de las aplicaciones que utilizo regularmente en mi sistema Ubuntu. 
+Utilizando Ansible, puedes automatizar la instalación de estas aplicaciones con facilidad.
 
 ## Requisitos
 
-- Ubuntu (versión 23.04 o superior)
+- Ubuntu versión 23.04 (probado)
 
 ## Instrucciones
 
