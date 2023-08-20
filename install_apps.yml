@@ -1,6 +1,6 @@
 ---
 - name: Instalación y configuración de aplicaciones en Ubuntu
-  hosts: localhost
+  hosts: ###Especificar hostname ###
   become: yes
 
   vars:
