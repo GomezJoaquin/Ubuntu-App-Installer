@@ -28,7 +28,7 @@ Utilizando Ansible, puedes automatizar la instalación de estas aplicaciones con
 * Docker
 * Wireshark
 * Traceroute
-* Java 8
+* Java 17
 * Postman
 * npm
 * Php

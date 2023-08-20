@@ -1,110 +1,61 @@
-- name: Instalar aplicaciones en Ubuntu
-  hosts: #### Especificar hosts ######
-  become: true
+---
+- name: Instalación y configuración de aplicaciones en Ubuntu
+  hosts: localhost
+  become: yes
+
+  vars:
+    ubuntu_release: "{{ ansible_distribution_release }}"
+    docker_gpg_key_url: "https://download.docker.com/linux/ubuntu/gpg"
+    vscode_repo_key_url: "https://packages.microsoft.com/keys/microsoft.asc"
 
   tasks:
-    # Agregar repositorios y claves GPG
-    - name: Agregar el repositorio de Visual Studio Code
-      shell: |
-        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-        mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
-        echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
-      become: true
+    - name: Agregar repositorio de Visual Studio Code
+      apt_key:
+        url: "{{ vscode_repo_key_url }}"
+        state: present
 
-    - name: Agregar el repositorio de Docker
+    - name: Agregar repositorio de Visual Studio Code
       apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
         state: present
 
-    - name: Agregar el repositorio de Wireshark
-      apt:
-        name: wireshark
+    - name: Agregar repositorio de Docker
+      apt_key:
+        url: "{{ docker_gpg_key_url }}"
         state: present
 
-    # Actualizar lista de paquetes
-    - name: Actualizar lista de paquetes
-      apt:
-        update_cache: yes
-
-    #Instalacion de paquetes
-    - name: Instalar Java 8
-      apt:
-        name: openjdk-8-jdk
-
-    - name: Instalar Git
-      apt:
-        name: git
-        state: present
-      become: true
-
-    - name: Instalar Ansible
-      apt:
-        name: ansible
+    - name: Agregar repositorio de Docker
+      apt_repository:
+        repo: "deb https://download.docker.com/linux/ubuntu {{ ubuntu_release }} stable"
         state: present
 
-    - name: Instalar Visual Studio Code
+    - name: Instalar paquetes base
       apt:
-        name: code
+        name:
+          - default-jdk  # Instala el último JDK disponible
+          - git
+          - ansible
+          - code
+          - npm
+          - php
+          - wireshark
+          - traceroute
+          - gparted
+          - remmina
+          - meld
+          - nmap
         state: present
 
     - name: Instalar Postman usando Snap
       snap:
         name: postman
 
-    - name: Instalar npm
-      apt:
-        name: npm
-        state: present
-
-    - name: Instalar PHP
-      apt:
-        name: php
-        state: present
-      become: true
-
-    - name: Instalar Wireshark
-      apt:
-        name: wireshark
-        state: present
-      become: true
-
-    - name: Instalar Traceroute
-      apt:
-        name: traceroute
-        state: present
-
-    - name: Agregar Docker GPG apt Key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Update apt and install docker-ce
+    - name: Instalar Docker CE
       apt:
         name: docker-ce
         state: latest
         update_cache: yes
 
-    - name: Instalar GParted
-      apt:
-        name: gparted
-        state: present
-
-    - name: Instalar Remmina
-      apt:
-        name: remmina
-        state: present
-
-    - name: Instalar Meld
-      apt:
-        name: meld
-        state: present
-
-    - name: Instalar Nmap
-      apt:
-        name: nmap
-        state: present
-
-    # Actualizar paquetes e instalar actualizaciones
     - name: Actualizar lista de paquetes e instalar actualizaciones
       apt:
         upgrade: dist
