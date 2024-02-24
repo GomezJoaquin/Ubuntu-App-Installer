@@ -51,6 +51,10 @@
       snap:
         name: postman
 
+    - name: Instalar iCloud Notes usando Snap
+      snap:
+        name: icloud-notes
+    
     - name: Instalar npm
       apt:
         name: npm
@@ -111,3 +115,5 @@
         update_cache: yes
         autoremove: yes
         autoclean: yes
+
+    
