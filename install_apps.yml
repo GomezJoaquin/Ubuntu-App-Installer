@@ -1,91 +1,49 @@
 ---
 - name: Instalación y configuración de aplicaciones en Ubuntu
-  hosts: ###Especificar hostname ###
+  hosts: #### Especificar hostname #####
   become: yes
 
-  vars:
-    ubuntu_release: "{{ ansible_distribution_release }}"
-    docker_gpg_key_url: "https://download.docker.com/linux/ubuntu/gpg"
-    vscode_repo_key_url: "https://packages.microsoft.com/keys/microsoft.asc"
-
   tasks:
-    - name: Agregar repositorio de Visual Studio Code
-      apt_key:
-        url: "{{ vscode_repo_key_url }}"
+    - name: Instalar Visual Studio Code utilizando Snap
+      snap:
+        name: "code"
+        classic: yes
         state: present
 
-    - name: Agregar repositorio de Visual Studio Code
-      apt_repository:
-        repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+    - name: Instalar Docker utilizando Snap
+      snap:
+        name: "docker"
         state: present
 
-    - name: Agregar repositorio de Docker
-      apt_key:
-        url: "{{ docker_gpg_key_url }}"
-        state: present
-
-    - name: Agregar repositorio de Docker
-      apt_repository:
-        repo: "deb https://download.docker.com/linux/ubuntu {{ ubuntu_release }} stable"
-        state: present
-
-    - name: Instalar paquetes base
+    - name: Instalar paquetes base usando APT
       apt:
-        name:
-          - default-jdk  # Instala el último JDK disponible
-          - git
-          - ansible
-          - code
-          - npm
-          - php
-          - wireshark
-          - traceroute
-          - gparted
-          - remmina
-          - meld
-          - nmap
+        name: "{{ item }}"
         state: present
+      loop:
+        - default-jdk  # Instala el último JDK disponible
+        - git
+        - ansible
+        - npm
+        - php
+        - wireshark
+        - traceroute
+        - gparted
+        - remmina
+        - meld
+        - nmap
+        - net-tools
+        - dbeaver-ce
+      ignore_errors: yes
 
     - name: Instalar Postman usando Snap
       snap:
-        name: postman
+        name: "postman"
+        state: present
 
     - name: Instalar iCloud Notes usando Snap
       snap:
-        name: icloud-notes
-    
-    - name: Instalar npm
-      apt:
-        name: npm
+        name: "icloud-notes"
         state: present
-
-    - name: Instalar PHP
-      apt:
-        name: php
-        state: present
-      become: true
-
-    - name: Instalar Wireshark
-      apt:
-        name: wireshark
-        state: present
-      become: true
-
-    - name: Instalar Traceroute
-      apt:
-        name: traceroute
-        state: present
-
-    - name: Agregar Docker GPG apt Key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Update apt and install docker-ce
-      apt:
-        name: docker-ce
-        state: latest
-        update_cache: yes
 
     - name: Actualizar lista de paquetes e instalar actualizaciones
       apt:
@@ -93,5 +51,3 @@
         update_cache: yes
         autoremove: yes
         autoclean: yes
-
-    
